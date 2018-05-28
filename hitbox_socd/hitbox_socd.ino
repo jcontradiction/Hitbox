@@ -19,33 +19,33 @@ typedef struct Button {
 Button buttons[] = {
   // LP+MP+HP+LK+Up alternative costume button input
   // Top row, left-to-right:
-  { Bounce(1, DEBOUNCE), KEY_Q, 0, 2 }, //LP
-  { Bounce(2, DEBOUNCE), KEY_W, 0, 3 }, //MP
-  { Bounce(3, DEBOUNCE), KEY_E, 0, 4 }, //HP
+  { Bounce(1, DEBOUNCE), KEY_G, 2 }, //LP
+  { Bounce(2, DEBOUNCE), KEY_H, 3 }, //MP
+  { Bounce(3, DEBOUNCE), KEY_J, 4 }, //HP
  
  // Bottom row, left-to-right
-  { Bounce(4, DEBOUNCE), KEY_A, 0, 1 }, //LK
-  { Bounce(5, DEBOUNCE), KEY_S, 0, 2 }, //MK
-  { Bounce(6, DEBOUNCE), KEY_D, 0, 3 }, //HK
+  { Bounce(4, DEBOUNCE), KEY_B, 1 }, //LK
+  { Bounce(5, DEBOUNCE), KEY_N, 2 }, //MK
+  { Bounce(6, DEBOUNCE), KEY_M, 3 }, //HK
 
   
   //L1(All punch), L2(All kick)
-  { Bounce(7, DEBOUNCE), KEY_R, 0, 1 }, //L1
-  { Bounce(8, DEBOUNCE), KEY_F, 0, 1 }, //L2
+  { Bounce(7, DEBOUNCE), KEY_K, 1 }, //L1
+  { Bounce(8, DEBOUNCE), KEY_COMMA, 1 }, //L2
 
   //options, select
-  { Bounce(9, DEBOUNCE), KEY_O, 0, 1 },
-  { Bounce(10, DEBOUNCE), KEY_P, 0, 1 },
+  { Bounce(9, DEBOUNCE), KEY_PERIOD, 1 },
+  { Bounce(10, DEBOUNCE), KEY_SLASH, 1 },
   
-  //L3, R3
-  { Bounce(11, DEBOUNCE), KEY_K, 0, 1 },
-  { Bounce(12, DEBOUNCE), KEY_L, 0, 1 },
+  //L3, R31
+  { Bounce(11, DEBOUNCE), KEY_ENTER, 1 },
+  { Bounce(12, DEBOUNCE), KEY_ESC, 1 },
   
   // Joystick
-  { Bounce(22, DEBOUNCE), KEY_RIGHT, 0, 5 },
-  { Bounce(19, DEBOUNCE), KEY_LEFT, 0, 5 },
-  { Bounce(20, DEBOUNCE), KEY_UP, 0, 6 },
-  { Bounce(21, DEBOUNCE), KEY_DOWN, 0, 6 },
+  { Bounce(22, DEBOUNCE), KEY_D, 5 },
+  { Bounce(19, DEBOUNCE), KEY_A, 5 },
+  { Bounce(20, DEBOUNCE), KEY_W, 6 },
+  { Bounce(21, DEBOUNCE), KEY_S, 6 },
 };
 
 void setup() {
