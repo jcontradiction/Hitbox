@@ -2,26 +2,45 @@
 //imgur link  https://imgur.com/gallery/q7Egf
 //based on code posted at https://www.reddit.com/r/Teensy/comments/2rfkhw/i_made_a_teensypowered_arcade_stick/
 // 10 = 10 ms debounce time
+// hitbox button configuration
+// 4 directional buttons
+// 4 punch buttons (LP, MP, HP, all 3 punch buttons together)
+// 4 kick buttons (LK, MK, HK, all 3 kick buttons together)
+// 4 control buttons(options, share, L3, R3)
 
 #define DEBOUNCE 10
  
 typedef struct Button {
   Bounce button;
   int key;
-  byte modifier;
-  byte keynum;
+  byte modifier;  //not used for now.  holding it while pressing another button ie shift button
+  byte keynum;    //USB HID's 6-key limit
 } Button;
 
 Button buttons[] = {
+  // LP+MP+HP+LK+Up alternative costume button input
   // Top row, left-to-right:
-  { Bounce(3, DEBOUNCE), KEY_A, 0, 2 },
-  { Bounce(2, DEBOUNCE), KEY_S, 0, 3 },
-  { Bounce(1, DEBOUNCE), KEY_5, 0, 4 },
+  { Bounce(1, DEBOUNCE), KEY_Q, 0, 2 }, //LP
+  { Bounce(2, DEBOUNCE), KEY_W, 0, 3 }, //MP
+  { Bounce(3, DEBOUNCE), KEY_E, 0, 4 }, //HP
+ 
+ // Bottom row, left-to-right
+  { Bounce(4, DEBOUNCE), KEY_A, 0, 1 }, //LK
+  { Bounce(5, DEBOUNCE), KEY_S, 0, 2 }, //MK
+  { Bounce(6, DEBOUNCE), KEY_D, 0, 3 }, //HK
 
-  // Bottom row, left-to-right
-  { Bounce(6, DEBOUNCE), MODIFIERKEY_SHIFT, 1, 0 },
-  { Bounce(5, DEBOUNCE), MODIFIERKEY_CTRL, 1, 0 },
-  { Bounce(4, DEBOUNCE), KEY_1, 0, 1 },
+  
+  //L1(All punch), L2(All kick)
+  { Bounce(7, DEBOUNCE), KEY_R, 0, 1 }, //L1
+  { Bounce(8, DEBOUNCE), KEY_F, 0, 1 }, //L2
+
+  //options, select
+  { Bounce(9, DEBOUNCE), KEY_O, 0, 1 },
+  { Bounce(10, DEBOUNCE), KEY_P, 0, 1 },
+  
+  //L3, R3
+  { Bounce(11, DEBOUNCE), KEY_K, 0, 1 },
+  { Bounce(12, DEBOUNCE), KEY_L, 0, 1 },
   
   // Joystick
   { Bounce(22, DEBOUNCE), KEY_RIGHT, 0, 5 },
@@ -34,7 +53,7 @@ int current_modifiers = 0;
 
 void setup() {
   int n;
-  for(n=1; n <= 6; n++)
+  for(n=1; n <= 12; n++)
     pinMode(n, INPUT_PULLUP);
 
   for(n=19; n <= 22; n++)
@@ -44,13 +63,15 @@ void setup() {
 void loop() {
   int n;
 
-  for(n=0; n < 10; n++)
+  for(n=0; n < 16; n++)
     buttons[n].button.update();
 
-  for(n=0; n < 10; n++){
+  for(n=0; n < 16; n++){
     if(buttons[n].button.fallingEdge()){
       // Falling edge, button is starting being pressed
-      if(buttons[n].modifier) current_modifiers |= buttons[n].key;
+      if(buttons[n].modifier) {
+		  current_modifiers |= buttons[n].key; //current_modifiers = current_modifiers | buttons[n].key
+		  }
       else {
         switch(buttons[n].keynum){
           case 1: Keyboard.set_key1(buttons[n].key); break;
@@ -63,7 +84,9 @@ void loop() {
       }
     } else if(buttons[n].button.risingEdge()){
       // Rising edge, button is coming up
-      if(buttons[n].modifier) current_modifiers &= ~(buttons[n].key);
+      if(buttons[n].modifier) {
+		  current_modifiers &= ~(buttons[n].key); //current_modifiers = current_modifiers & ~(buttons[n].key);
+		  }
       else {
         switch(buttons[n].keynum){
           case 1: Keyboard.set_key1(0); break;
