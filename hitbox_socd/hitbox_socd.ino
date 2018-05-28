@@ -1,6 +1,6 @@
 #include <Bounce.h>
-//imgur link  https://imgur.com/gallery/q7Egf
-//based on code posted at https://www.reddit.com/r/Teensy/comments/2rfkhw/i_made_a_teensypowered_arcade_stick/
+// imgur link  https://imgur.com/gallery/q7Egf
+// based on code posted at https://www.reddit.com/r/Teensy/comments/2rfkhw/i_made_a_teensypowered_arcade_stick/
 // 10 = 10 ms debounce time
 // hitbox button configuration
 // 4 directional buttons
@@ -13,7 +13,6 @@
 typedef struct Button {
   Bounce button;
   int key;
-  byte modifier;  //not used for now.  holding it while pressing another button ie shift button
   byte keynum;    //USB HID's 6-key limit
 } Button;
 
@@ -49,8 +48,6 @@ Button buttons[] = {
   { Bounce(21, DEBOUNCE), KEY_DOWN, 0, 6 },
 };
 
-int current_modifiers = 0;
-
 void setup() {
   int n;
   for(n=1; n <= 12; n++)
@@ -69,10 +66,6 @@ void loop() {
   for(n=0; n < 16; n++){
     if(buttons[n].button.fallingEdge()){
       // Falling edge, button is starting being pressed
-      if(buttons[n].modifier) {
-		  current_modifiers |= buttons[n].key; //current_modifiers = current_modifiers | buttons[n].key
-		  }
-      else {
         switch(buttons[n].keynum){
           case 1: Keyboard.set_key1(buttons[n].key); break;
           case 2: Keyboard.set_key2(buttons[n].key); break;
@@ -81,13 +74,8 @@ void loop() {
           case 5: Keyboard.set_key5(buttons[n].key); break;
           case 6: Keyboard.set_key6(buttons[n].key); break;
         }
-      }
     } else if(buttons[n].button.risingEdge()){
       // Rising edge, button is coming up
-      if(buttons[n].modifier) {
-		  current_modifiers &= ~(buttons[n].key); //current_modifiers = current_modifiers & ~(buttons[n].key);
-		  }
-      else {
         switch(buttons[n].keynum){
           case 1: Keyboard.set_key1(0); break;
           case 2: Keyboard.set_key2(0); break;
@@ -96,7 +84,6 @@ void loop() {
           case 5: Keyboard.set_key5(0); break;
           case 6: Keyboard.set_key6(0); break;
         }
-      }      
     }
   }
 
